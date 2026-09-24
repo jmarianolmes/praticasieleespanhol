@@ -268,12 +268,24 @@ export default function Home() {
   };
 
   const createNewSession = () => {
+    if (hasUnsavedDraft() && !window.confirm("Há dados da tarefa atual que ainda não foram salvos. Criar outra sessão vai descartá-los. Continuar?")) return;
     const session = createSession(`Sessão ${String(sessions.length + 1).padStart(2, "0")}`);
     setSessions((current) => [...current, session]);
     setActiveId(session.id);
     setDraft(emptyDraft());
     setView("capture");
     setStatus("Nova sessão criada. Abra o simulador e comece pela página que deseja registrar.");
+  };
+
+  const hasUnsavedDraft = () => Boolean(
+    draft.prompt.trim() || draft.answer.trim() || draft.choice.trim() || draft.correctAnswer.trim() || draft.notes.trim() ||
+    draft.captureIds.length > 0 || draft.audioIds.length > 0,
+  );
+
+  const selectSession = (sessionId: string) => {
+    if (hasUnsavedDraft() && !window.confirm("Há dados da tarefa atual que ainda não foram salvos. Trocar de sessão vai descartá-los. Continuar?")) return;
+    setActiveId(sessionId);
+    setDraft(emptyDraft());
   };
 
   const renameActiveSession = () => {
@@ -285,7 +297,13 @@ export default function Home() {
   };
 
   const changeDraftModule = (module: ModuleKey) => {
-    setDraft((current) => ({ ...current, module, captureIds: [], audioIds: [] }));
+    if (module === draft.module) return;
+    if (isRecording) {
+      setStatus("Pare a gravação atual antes de mudar de módulo.");
+      return;
+    }
+    if (hasUnsavedDraft() && !window.confirm("Há dados da tarefa atual que ainda não foram salvos. Mudar de módulo vai descartá-los. Continuar?")) return;
+    setDraft({ ...emptyDraft(), module });
   };
 
   const captureScreen = async () => {
@@ -437,8 +455,21 @@ export default function Home() {
   };
 
   const removeTask = (taskId: string) => {
-    updateActiveSession((session) => ({ ...session, tasks: session.tasks.filter((task) => task.id !== taskId), updatedAt: new Date().toISOString() }));
-    setStatus("Registro removido desta sessão.");
+    updateActiveSession((session) => {
+      const tasks = session.tasks.filter((task) => task.id !== taskId);
+      const usedCaptureIds = new Set(tasks.flatMap((task) => task.captureIds));
+      const usedAudioIds = new Set(tasks.flatMap((task) => task.audioIds));
+      draft.captureIds.forEach((id) => usedCaptureIds.add(id));
+      draft.audioIds.forEach((id) => usedAudioIds.add(id));
+      return {
+        ...session,
+        tasks,
+        captures: session.captures.filter((capture) => usedCaptureIds.has(capture.id)),
+        audios: session.audios.filter((audio) => usedAudioIds.has(audio.id)),
+        updatedAt: new Date().toISOString(),
+      };
+    });
+    setStatus("Registro e anexos vinculados removidos desta sessão.");
   };
 
   const buildPdf = async () => {
@@ -588,7 +619,7 @@ export default function Home() {
             <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.19em] text-[#9b978f]">Navegação</p>
             <nav className="space-y-1">
               <SidebarItem icon={LayoutDashboard} label="Visão geral" active={view === "overview"} onClick={() => setView("overview")} />
-              <SidebarItem icon={MonitorUp} label="Capturar página" active={view === "capture"} onClick={() => setView("capture")} />
+              <SidebarItem icon={MonitorUp} label="Registrar tarefa" active={view === "capture"} onClick={() => setView("capture")} />
               <SidebarItem icon={Archive} label="Arquivo da sessão" active={view === "archive"} count={taskCount} onClick={() => setView("archive")} />
             </nav>
           </div>
@@ -619,7 +650,7 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <label className="sr-only" htmlFor="session-select">Selecionar sessão</label>
               <div className="relative">
-                <select id="session-select" value={activeSession?.id ?? ""} onChange={(event) => { setActiveId(event.target.value); setDraft(emptyDraft()); }} className="h-9 max-w-[220px] appearance-none rounded-full border border-[#d9d0c1] bg-[#faf8f3] py-0 pl-3 pr-8 text-[11px] font-semibold text-[#394240] outline-none transition focus:border-[#1e2528]">
+              <select id="session-select" value={activeSession?.id ?? ""} onChange={(event) => selectSession(event.target.value)} className="h-9 max-w-[220px] appearance-none rounded-full border border-[#d9d0c1] bg-[#faf8f3] py-0 pl-3 pr-8 text-[11px] font-semibold text-[#394240] outline-none transition focus:border-[#1e2528]">
                   {sessions.map((session) => <option key={session.id} value={session.id}>{session.title}</option>)}
                 </select>
                 <ChevronDown className="pointer-events-none absolute right-2.5 top-2.5 text-[#6b706c]" size={14} />
@@ -631,15 +662,15 @@ export default function Home() {
 
           <div className="mt-7 flex gap-2 overflow-x-auto lg:hidden">
             <MobileNavItem label="Visão geral" active={view === "overview"} onClick={() => setView("overview")} />
-            <MobileNavItem label="Capturar" active={view === "capture"} onClick={() => setView("capture")} />
+            <MobileNavItem label="Registrar" active={view === "capture"} onClick={() => setView("capture")} />
             <MobileNavItem label={`Arquivo ${taskCount ? `· ${taskCount}` : ""}`} active={view === "archive"} onClick={() => setView("archive")} />
           </div>
 
           <section className="mt-7 flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-[760px]">
               <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[#b35f41]">{view === "overview" ? "Painel de preparação" : view === "capture" ? "Registro guiado" : "Material cronológico"}</p>
-              <h1 className="font-display text-[clamp(2.25rem,5vw,4.5rem)] font-semibold leading-[0.94] tracking-[-0.065em] text-[#1e2528]">{view === "overview" ? <>Prática que<br /><em className="font-editorial font-normal text-[#b35f41]">deixa rastro.</em></> : view === "capture" ? <>Capture a página.<br /><em className="font-editorial font-normal text-[#b35f41]">Salve o processo.</em></> : <>Tudo em ordem.<br /><em className="font-editorial font-normal text-[#b35f41]">Pronto para corrigir.</em></>}</h1>
-              <p className="mt-5 max-w-[620px] text-[14px] leading-6 text-[#65706b]">{view === "overview" ? "Passe pelas páginas do simulador oficial em outra aba e monte um arquivo fiel da tentativa: pergunta, resposta, captura e voz — sem depender de uma nota automática." : view === "capture" ? "Mantenha o simulador aberto em outra aba. Cada captura ou gravação fica anexada à tarefa atual até você salvar o registro." : "Revise a sessão como um professor verá: por módulo, na ordem em que as tarefas foram registradas, com os anexos identificados."}</p>
+              <h1 className="font-display text-[clamp(2.25rem,5vw,4.5rem)] font-semibold leading-[0.94] tracking-[-0.065em] text-[#1e2528]">{view === "overview" ? <>Prática que<br /><em className="font-editorial font-normal text-[#b35f41]">deixa rastro.</em></> : view === "capture" ? <>Prepare a tarefa.<br /><em className="font-editorial font-normal text-[#b35f41]">Salve o rastro.</em></> : <>Tudo em ordem.<br /><em className="font-editorial font-normal text-[#b35f41]">Pronto para corrigir.</em></>}</h1>
+              <p className="mt-5 max-w-[620px] text-[14px] leading-6 text-[#65706b]">{view === "overview" ? "Passe pelas páginas do simulador oficial em outra aba e monte um arquivo fiel da tentativa: pergunta, resposta, captura e voz — sem depender de uma nota automática." : view === "capture" ? "Cada captura ou gravação fica anexada à tarefa atual. Salve este registro antes de passar para a próxima pergunta do simulador." : "Revise a sessão como um professor verá: por módulo, na ordem em que as tarefas foram registradas, com os anexos identificados."}</p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <span className="rounded-full border border-[#d9d0c1] bg-[#faf8f3] px-3 py-2 font-mono text-[9px] uppercase tracking-[0.14em] text-[#6b706c]">B2 · acompanhamento</span>
@@ -681,7 +712,7 @@ function Overview({ activeSession, taskCount, captureCount, audioCount, oralTask
           <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.19em] text-[#b8cec8]"><span className="h-1.5 w-1.5 rounded-full bg-[#d27652]" /> Próximo passo recomendado</div>
           <h2 className="mt-7 font-display text-[clamp(1.7rem,3vw,2.55rem)] font-semibold leading-[1.03] tracking-[-0.045em]">Abra o simulador,<br /><span className="font-editorial font-normal text-[#d8a078]">capture sem pressa.</span></h2>
           <p className="mt-4 max-w-[490px] text-[13px] leading-6 text-[#b8c0bb]">A captura manual é intencional: você escolhe a aba do SIELE e decide o que merece entrar no arquivo. Depois, o ZIP reúne tudo para uma correção mais justa.</p>
-          <div className="mt-7 flex flex-wrap gap-2"><button onClick={onStart} className="inline-flex items-center gap-2 rounded-full bg-[#f2c29f] px-4 py-2.5 text-[11px] font-bold text-[#1e2528] transition hover:bg-[#f8d5b9]"><MonitorUp size={14} /> Começar captura</button><a href="https://examendemo.siele.org/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#5b6967] px-4 py-2.5 text-[11px] font-semibold text-[#e5ece8] transition hover:border-[#c2d5cf]"><ArrowUpRight size={14} /> Abrir SIELE</a></div>
+          <div className="mt-7 flex flex-wrap gap-2"><button onClick={onStart} className="inline-flex items-center gap-2 rounded-full bg-[#f2c29f] px-4 py-2.5 text-[11px] font-bold text-[#1e2528] transition hover:bg-[#f8d5b9]"><MonitorUp size={14} /> Registrar tarefa</button><a href="https://examendemo.siele.org/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-[#5b6967] px-4 py-2.5 text-[11px] font-semibold text-[#e5ece8] transition hover:border-[#c2d5cf]"><ArrowUpRight size={14} /> Abrir SIELE</a></div>
         </div>
       </div>
       <div className="rounded-[26px] border border-[#ded6ca] bg-[#fbfaf6] p-6 sm:p-7">
@@ -716,7 +747,7 @@ function CaptureView({ draft, setDraft, activeModule, taskCount, captureCount, a
   return <div className="space-y-6">
     <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
       <div className="rounded-[26px] border border-[#ded6ca] bg-[#fbfaf6] p-5 sm:p-7">
-        <div className="flex flex-col gap-5 border-b border-[#e6e0d7] pb-6 sm:flex-row sm:items-start sm:justify-between"><div><p className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9b978f]">Tarefa atual</p><h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.05em]">Registre o que está na tela.</h2></div><div className="rounded-full bg-[#f2eee6] px-3 py-2 font-mono text-[10px] text-[#6b706c]">{String(taskCount + 1).padStart(2, "0")}º registro</div></div>
+        <div className="flex flex-col gap-5 border-b border-[#e6e0d7] pb-6 sm:flex-row sm:items-start sm:justify-between"><div><p className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9b978f]">Tarefa em elaboração</p><h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.05em]">Prepare o registro.</h2></div><div className="rounded-full bg-[#f2eee6] px-3 py-2 font-mono text-[10px] text-[#6b706c]">{String(taskCount + 1).padStart(2, "0")}º registro da sessão</div></div>
         <div className="mt-6 grid gap-3 sm:grid-cols-4">{MODULES.map((item) => { const Icon = item.icon; const active = item.key === draft.module; return <button key={item.key} onClick={() => changeDraftModule(item.key)} className={`rounded-2xl border p-3 text-left transition ${active ? "border-[#1e2528] bg-[#1e2528] text-[#f9f7f1] shadow-[0_8px_16px_rgba(30,37,40,0.12)]" : "border-[#e4ded5] bg-[#faf8f3] text-[#6b706c] hover:border-[#a9aaa2]"}`}><Icon size={16} className={active ? "text-[#f2c29f]" : "text-[#b35f41]"} /><span className="mt-3 block text-[11px] font-semibold">{item.short}</span><span className={`mt-1 block text-[10px] leading-4 ${active ? "text-[#b9c7c2]" : "text-[#90948d]"}`}>{item.key}</span></button>; })}</div>
         <div className="mt-6 grid gap-4 sm:grid-cols-[115px_1fr]">
           <Field label="Tarefa / item"><input value={draft.taskNo} onChange={(event) => setDraft((current) => ({ ...current, taskNo: event.target.value }))} className="control" placeholder="1" /></Field>
@@ -724,7 +755,7 @@ function CaptureView({ draft, setDraft, activeModule, taskCount, captureCount, a
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label={draft.module === "EIE" ? "Resposta escrita" : "Resposta / alternativa marcada"}><textarea value={draft.answer} onChange={(event) => setDraft((current) => ({ ...current, answer: event.target.value }))} className="control min-h-[128px] resize-y" placeholder={draft.module === "EIE" ? "Escreva aqui a resposta original, sem corrigir…" : "Descreva a alternativa ou resposta selecionada…"} /><div className="mt-2 flex items-center justify-between font-mono text-[9px] text-[#9b978f]"><span>{draft.answer.trim() ? `${draft.answer.trim().split(/\s+/).length} palavra(s)` : "contador de palavras"}</span><span>{draft.module === "EIE" ? "preservar original" : "registro manual"}</span></div></Field><Field label="Observações para o corretor"><textarea value={draft.notes} onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))} className="control min-h-[128px] resize-y" placeholder="Dúvida, tempo usado, dificuldade, contexto ou hipótese…" /><div className="mt-2 text-right font-mono text-[9px] text-[#9b978f]">campo opcional</div></Field></div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label="Gabarito conhecido (opcional)"><input value={draft.correctAnswer} onChange={(event) => setDraft((current) => ({ ...current, correctAnswer: event.target.value }))} className="control" placeholder="Ex.: B / ainda não sei" /></Field><Field label="Status do registro"><div className="flex h-[43px] items-center gap-2 rounded-xl border border-[#ded6ca] bg-[#f5f2eb] px-3 text-[11px] text-[#6b706c]"><Check size={14} className="text-[#2c8b7d]" /> pronto para anexar evidências</div></Field></div>
-        <div className="mt-7 flex flex-col gap-3 border-t border-[#e6e0d7] pt-5 sm:flex-row sm:items-center sm:justify-between"><div className="flex flex-wrap gap-2"><span className="rounded-full bg-[#e7f2ef] px-3 py-1.5 font-mono text-[9px] text-[#21675e]">{draft.captureIds.length} imagem(ns)</span><span className="rounded-full bg-[#f5e4d7] px-3 py-1.5 font-mono text-[9px] text-[#a95538]">{draft.audioIds.length} áudio(s)</span></div><button onClick={saveTask} className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#b35f41] px-5 text-[12px] font-bold text-white shadow-[0_8px_18px_rgba(179,95,65,0.19)] transition hover:bg-[#944a31]"><Save size={15} /> Salvar tarefa</button></div>
+        <div className="mt-7 flex flex-col gap-3 border-t border-[#e6e0d7] pt-5 sm:flex-row sm:items-center sm:justify-between"><div><div className="flex flex-wrap gap-2"><span className="rounded-full bg-[#e7f2ef] px-3 py-1.5 font-mono text-[9px] text-[#21675e]">{draft.captureIds.length} imagem(ns)</span><span className="rounded-full bg-[#f5e4d7] px-3 py-1.5 font-mono text-[9px] text-[#a95538]">{draft.audioIds.length} áudio(s)</span></div><p className="mt-2 text-[10px] text-[#858a84]">Ao salvar, o formulário avança para a próxima tarefa.</p></div><button onClick={saveTask} className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#b35f41] px-5 text-[12px] font-bold text-white shadow-[0_8px_18px_rgba(179,95,65,0.19)] transition hover:bg-[#944a31]"><Save size={15} /> Salvar e começar próxima</button></div>
       </div>
 
       <div className="space-y-5">
