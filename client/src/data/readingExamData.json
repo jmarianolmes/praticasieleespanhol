@@ -4,8 +4,8 @@
     "task": 1,
     "number": 1,
     "type": "radio",
-    "sourceText": "Usted va a leer cinco textos breves. Elija la opción correcta para cada una de las cinco preguntas.",
-    "prompt": "Hola, María: ¿Quieres venir al concierto de Shakira? Canta en Santiago este verano, los días 24, 25 y 26. Es un concierto con sus grandes canciones, y canta con Alejandro Sanz, Juanes y otros amigos. Adela y yo queremos ir el viernes 24 pero, si no puedes, cambiamos el día. ¿Vienes con nosotros? Dime algo pronto porque el lunes empiezan a vender las entradas y siempre se terminan muy rápido. Adiós, Pedro 1. Pedro dice que…",
+    "sourceText": "Hola, María: ¿Quieres venir al concierto de Shakira? Canta en Santiago este verano, los días 24, 25 y 26. Es un concierto con sus grandes canciones, y canta con Alejandro Sanz, Juanes y otros amigos. Adela y yo queremos ir el viernes 24 pero, si no puedes, cambiamos el día. ¿Vienes con nosotros? Dime algo pronto porque el lunes empiezan a vender las entradas y siempre se terminan muy rápido. Adiós, Pedro",
+    "prompt": "1. Pedro dice que…",
     "options": [
       "en el concierto hay diferentes cantantes.",
       "quiere ir al concierto el lunes.",
@@ -17,8 +17,8 @@
     "task": 1,
     "number": 2,
     "type": "radio",
-    "sourceText": "Usted va a leer cinco textos breves. Elija la opción correcta para cada una de las cinco preguntas.",
-    "prompt": "<< SE ALQUILA >> Se alquila una habitación en apartamento compartido con tres estudiantes. Está muy bien para una joven. El apartamento es grande con 4 dormitorios, 2 baños y cocina. Tiene 100 m 2 y está al lado del metro y de algunas paradas de autobuses que llevan al centro. 200€/mes. 2. El anuncio es para personas que quieren…",
+    "sourceText": "<< SE ALQUILA >> Se alquila una habitación en apartamento compartido con tres estudiantes. Está muy bien para una joven. El apartamento es grande con 4 dormitorios, 2 baños y cocina. Tiene 100 m 2 y está al lado del metro y de algunas paradas de autobuses que llevan al centro. 200€/mes.",
+    "prompt": "2. El anuncio es para personas que quieren…",
     "options": [
       "un apartamento para su familia.",
       "una casa bien comunicada.",
@@ -30,8 +30,8 @@
     "task": 1,
     "number": 3,
     "type": "radio",
-    "sourceText": "Usted va a leer cinco textos breves. Elija la opción correcta para cada una de las cinco preguntas.",
-    "prompt": "<< PASIÓN >> Un año más llega a nuestra ciudad la empresa andaluza Hípicus con su interesante grupo Pasión . Más de cien actores y cincuenta caballos en un circo que gusta a pequeños y a grandes. Horarios: de martes a viernes: 18 h y 21 h. sábado y domingo: 18 h y 22 h. Con la compra de dos entradas para padres, los niños no pagan. Venta de entradas en la página: www.pasion.com 3. El circo Pasión …",
+    "sourceText": "<< PASIÓN >> Un año más llega a nuestra ciudad la empresa andaluza Hípicus con su interesante grupo Pasión . Más de cien actores y cincuenta caballos en un circo que gusta a pequeños y a grandes. Horarios: de martes a viernes: 18 h y 21 h. sábado y domingo: 18 h y 22 h. Con la compra de dos entradas para padres, los niños no pagan. Venta de entradas en la página: www.pasion.com",
+    "prompt": "3. El circo Pasión …",
     "options": [
       "tiene un horario diferente los fines de semana.",
       "es especialmente para niños.",
@@ -43,8 +43,8 @@
     "task": 1,
     "number": 4,
     "type": "radio",
-    "sourceText": "Usted va a leer cinco textos breves. Elija la opción correcta para cada una de las cinco preguntas.",
-    "prompt": "VETUSTA EN CONCIERTO Lugar: Teatro Principal. Fecha: viernes 20 de noviembre Hora: las puertas se abren a las 20:00 horas. El concierto empieza a las 22:00 horas. Precio: 27 euros. Concierto para mayores de 16 años. Compra tu entrada en las tiendas del centro comercial Las Torres. 4. En el anuncio se dice que…",
+    "sourceText": "VETUSTA EN CONCIERTO Lugar: Teatro Principal. Fecha: viernes 20 de noviembre Hora: las puertas se abren a las 20:00 horas. El concierto empieza a las 22:00 horas. Precio: 27 euros. Concierto para mayores de 16 años. Compra tu entrada en las tiendas del centro comercial Las Torres.",
+    "prompt": "4. En el anuncio se dice que…",
     "options": [
       "el concierto de Vetusta es por la noche.",
       "los niños pueden entrar al concierto.",
@@ -56,8 +56,8 @@
     "task": 1,
     "number": 5,
     "type": "radio",
-    "sourceText": "Usted va a leer cinco textos breves. Elija la opción correcta para cada una de las cinco preguntas.",
-    "prompt": "Queridos compañeros: Vendo un billete de tren a Barcelona, con ida el viernes 26 de junio y vuelta el domingo 28. El de ida sale de la estación de Madrid a las 19:00 y llega a Barcelona a las 21:30. El de vuelta sale a las 21:00 y llega a las 23:30. Lo vendo porque al final esos días trabajo. Cuesta 80€, más barato que en la estación. Gracias, Juan 5. Juan dice en su mensaje que…",
+    "sourceText": "Queridos compañeros: Vendo un billete de tren a Barcelona, con ida el viernes 26 de junio y vuelta el domingo 28. El de ida sale de la estación de Madrid a las 19:00 y llega a Barcelona a las 21:30. El de vuelta sale a las 21:00 y llega a las 23:30. Lo vendo porque al final esos días trabajo. Cuesta 80€, más barato que en la estación. Gracias, Juan",
+    "prompt": "5. Juan dice en su mensaje que…",
     "options": [
       "tiene billetes de tren baratos.",
       "puede viajar ese fin de semana.",
@@ -135,7 +135,7 @@
     "number": 1,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "1. ¿Quién decidió estudiar en el extranjero porque se lo aconsejaron? --Elija--",
+    "prompt": "1. ¿Quién decidió estudiar en el extranjero porque se lo aconsejaron?",
     "options": [
       "Gabriela",
       "Paula",
@@ -148,7 +148,7 @@
     "number": 2,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "2. ¿Quién se fue a otro país porque buscaba un cambio en su vida? --Elija--",
+    "prompt": "2. ¿Quién se fue a otro país porque buscaba un cambio en su vida?",
     "options": [
       "Gabriela",
       "Paula",
@@ -161,7 +161,7 @@
     "number": 3,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "3. ¿Quién dice que le costó mucho aprender el idioma? --Elija--",
+    "prompt": "3. ¿Quién dice que le costó mucho aprender el idioma?",
     "options": [
       "Gabriela",
       "Paula",
@@ -174,7 +174,7 @@
     "number": 4,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "4. ¿Quién dice que tuvo complicaciones económicas? --Elija--",
+    "prompt": "4. ¿Quién dice que tuvo complicaciones económicas?",
     "options": [
       "Gabriela",
       "Paula",
@@ -187,7 +187,7 @@
     "number": 5,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "5. ¿Quién aprendió a administrar su dinero gracias a esta experiencia? --Elija--",
+    "prompt": "5. ¿Quién aprendió a administrar su dinero gracias a esta experiencia?",
     "options": [
       "Gabriela",
       "Paula",
@@ -200,7 +200,7 @@
     "number": 6,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "6. ¿Quién dice que esta vivencia le ayudó a ser más independiente? --Elija--",
+    "prompt": "6. ¿Quién dice que esta vivencia le ayudó a ser más independiente?",
     "options": [
       "Gabriela",
       "Paula",
@@ -213,7 +213,7 @@
     "number": 7,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "7. ¿Quién afirma que repetiría la experiencia de regresar al país? --Elija--",
+    "prompt": "7. ¿Quién afirma que repetiría la experiencia de regresar al país?",
     "options": [
       "Gabriela",
       "Paula",
@@ -226,7 +226,7 @@
     "number": 8,
     "type": "select",
     "sourceText": "Usted va a leer tres textos en los que unas jóvenes chilenas hablan sobre su experiencia como estudiantes en un país extranjero. Elija la opción correcta para cada una de las ocho preguntas. GABRIELA Tenía varios compañeros que se habían ido anteriormente a estudiar al extranjero y me dijeron que la experiencia era fantástica y que por qué no buscaba la forma y hacía lo mismo. Pensaba ir a Alemania por seis meses, pero me gustó tanto que me quedé todo el año. Al principio lo pasé muy mal porque, aunque estudiaba mucho, el idioma me resultaba muy complicado y no me enteraba de nada. Sin embargo, al final conseguí aprobar los exámenes y me sentí muy feliz conmigo misma. Estuve viviendo con dos familias y tuve mucha suerte con las dos: nuestra relación fue muy linda y familiar. Mi experiencia fue excelente. Me divertí y aprendí muchas cosas, entre ellas, a organizar mi economía y a convivir con más gente. PAULA Yo quería escapar del día a día y esta fue la principal razón por la que fui a Holanda a estudiar. Debo decir que el colegio me impresionó muchísimo. Al principio no sabía ni una palabra de holandés y, como soy tímida, me daba vergüenza cuando no entendía lo que explicaba el profesor. Pero mis compañeros de clase me recibieron muy bien y me trataban como a una amiga. Para mí fue un año muy positivo y siempre recordaré con cariño esta experiencia. El único problema que tuve fue el dinero, porque el coste de vida era muy alto. SARA La experiencia de irse a otro país es increíble, se lo aconsejo a todo el mundo sin dudarlo. Cuando pienso en lo que viví, siempre es con una sonrisa en la cara. Lo que más recuerdo es la llegada a la casa de la familia en Bélgica, sin saber muy bien lo que iba a encontrarme y con ganas de conocerlo todo. La familia con la que viví era la mejor, tuve mucha suerte con ellos y les estoy muy agradecida por lo bien que se portaron conmigo. Siempre me hicieron sentir como una más. Lo que viví allí me enriqueció personalmente porque aprendí a solucionar los problemas por mí misma. Me gustaría volver algún día porque quiero hablar mejor el idioma. (Adaptado de www.yfuchile.cl/opiniones. Chile)",
-    "prompt": "8. ¿Quién cambió de opinión con respecto al tiempo que iba a pasar en el país de destino? --Elija--",
+    "prompt": "8. ¿Quién cambió de opinión con respecto al tiempo que iba a pasar en el país de destino?",
     "options": [
       "Gabriela",
       "Paula",
