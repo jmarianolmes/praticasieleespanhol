@@ -33,6 +33,7 @@ import {
   X,
 } from "lucide-react";
 import ReadingExam, { type ReadingAttemptAnswer, type ReadingQuestion } from "@/components/ReadingExam";
+import readingExamData from "@/data/readingExamData.json";
 
 type View = "overview" | "capture" | "archive";
 type ModuleKey = "CL" | "CA" | "EIE" | "EIO";
@@ -237,7 +238,7 @@ export default function Home() {
   const [exporting, setExporting] = useState(false);
   const [archiveFilter, setArchiveFilter] = useState<ModuleKey | "ALL">("ALL");
   const [readingMode, setReadingMode] = useState<"setup" | "take" | null>(null);
-  const [readingQuestions, setReadingQuestions] = useState<ReadingQuestion[]>([]);
+  const [readingQuestions, setReadingQuestions] = useState<ReadingQuestion[]>(readingExamData as ReadingQuestion[]);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordingStartedRef = useRef<number | null>(null);
   const captureInputRef = useRef<HTMLInputElement | null>(null);
