@@ -32,6 +32,7 @@ import {
   Volume2,
   X,
 } from "lucide-react";
+import ReadingExam, { type ReadingAttemptAnswer, type ReadingQuestion } from "@/components/ReadingExam";
 
 type View = "overview" | "capture" | "archive";
 type ModuleKey = "CL" | "CA" | "EIE" | "EIO";
@@ -235,6 +236,8 @@ export default function Home() {
   const [recordingMs, setRecordingMs] = useState(0);
   const [exporting, setExporting] = useState(false);
   const [archiveFilter, setArchiveFilter] = useState<ModuleKey | "ALL">("ALL");
+  const [readingMode, setReadingMode] = useState<"setup" | "take" | null>(null);
+  const [readingQuestions, setReadingQuestions] = useState<ReadingQuestion[]>([]);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordingStartedRef = useRef<number | null>(null);
   const captureInputRef = useRef<HTMLInputElement | null>(null);
@@ -303,13 +306,39 @@ export default function Home() {
   };
 
   const changeDraftModule = (module: ModuleKey) => {
-    if (module === draft.module) return;
+    if (module === draft.module && module !== "CL") return;
+    if (module === "CL" && draft.module === "CL" && !readingMode) {
+      setReadingMode("setup");
+      return;
+    }
     if (isRecording) {
       setStatus("Pare a gravação atual antes de mudar de módulo.");
       return;
     }
     if (hasUnsavedDraft() && !window.confirm("Há dados da tarefa atual que ainda não foram salvos. Mudar de módulo vai descartá-los. Continuar?")) return;
+    if (module === "CL") {
+      setReadingMode("setup");
+      setDraft(emptyDraft());
+      return;
+    }
     setDraft({ ...emptyDraft(), module });
+  };
+
+  const saveReadingAnswers = (answers: ReadingAttemptAnswer[]) => {
+    if (!activeSession) return;
+    updateActiveSession((session) => ({
+      ...session,
+      tasks: [...session.tasks, ...answers.map((item) => ({
+        id: makeId("task"), module: "CL" as ModuleKey, taskNo: `${item.task}.${item.number}`,
+        sourceText: item.sourceText, prompt: item.prompt, options: item.options.join("\n"),
+        answer: item.answer, choice: item.answer, correctAnswer: "", notes: "",
+        createdAt: new Date().toISOString(), captureIds: [], audioIds: [],
+      }))],
+      updatedAt: new Date().toISOString(),
+    }));
+    setReadingMode(null);
+    setView("archive");
+    setStatus(`${answers.length} respostas da Prova 1 foram salvas na sessão.`);
   };
 
   const captureScreen = async () => {
@@ -696,7 +725,7 @@ export default function Home() {
             </div>
           </section>
 
-          <div className="mt-10">{view === "overview" ? <Overview activeSession={activeSession} taskCount={taskCount} captureCount={captureCount} audioCount={audioCount} oralTasks={oralTasks} writtenTasks={writtenTasks} onStart={() => setView("capture")} onNew={createNewSession} /> : view === "capture" ? <CaptureView draft={draft} setDraft={setDraft} activeModule={activeModule} taskCount={taskCount} captureCount={captureCount} audioCount={audioCount} isRecording={isRecording} recordingMs={recordingMs} captureScreen={captureScreen} startRecording={startRecording} stopRecording={stopRecording} saveTask={saveTask} addImageFiles={addImageFiles} addAudioFiles={addAudioFiles} captureInputRef={captureInputRef} audioInputRef={audioInputRef} status={status} changeDraftModule={changeDraftModule} /> : <ArchiveView activeSession={activeSession} filteredTasks={filteredTasks} filter={archiveFilter} setFilter={setArchiveFilter} removeTask={removeTask} exporting={exporting} exportPdf={exportPdf} exportZip={exportZip} exportJson={exportJson} onCapture={() => setView("capture")} />}</div>
+          <div className="mt-10">{readingMode ? <ReadingExam mode={readingMode} initialQuestions={readingQuestions} onBack={() => setReadingMode(null)} onStart={(questions) => { setReadingQuestions(questions); setReadingMode("take"); }} onComplete={saveReadingAnswers} /> : view === "overview" ? <Overview activeSession={activeSession} taskCount={taskCount} captureCount={captureCount} audioCount={audioCount} oralTasks={oralTasks} writtenTasks={writtenTasks} onStart={() => setView("capture")} onNew={createNewSession} /> : view === "capture" ? <CaptureView draft={draft} setDraft={setDraft} activeModule={activeModule} taskCount={taskCount} captureCount={captureCount} audioCount={audioCount} isRecording={isRecording} recordingMs={recordingMs} captureScreen={captureScreen} startRecording={startRecording} stopRecording={stopRecording} saveTask={saveTask} addImageFiles={addImageFiles} addAudioFiles={addAudioFiles} captureInputRef={captureInputRef} audioInputRef={audioInputRef} status={status} changeDraftModule={changeDraftModule} /> : <ArchiveView activeSession={activeSession} filteredTasks={filteredTasks} filter={archiveFilter} setFilter={setArchiveFilter} removeTask={removeTask} exporting={exporting} exportPdf={exportPdf} exportZip={exportZip} exportJson={exportJson} onCapture={() => setView("capture")} />}</div>
 
           {view !== "overview" && <div className="mt-8 flex items-center gap-2 border-t border-[#ded6ca] pt-4 text-[11px] text-[#7b817b]"><Radio size={13} className="text-[#b35f41]" /><span>{status}</span></div>}
         </main>
