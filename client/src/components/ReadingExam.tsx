@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { ArrowLeft, Check, ChevronRight, ClipboardPaste, Eye, Plus, Save, Trash2 } from "lucide-react";
 
 export type ReadingQuestion = {
@@ -48,6 +48,10 @@ const defaultQuestions = (): ReadingQuestion[] => taskInfo.flatMap(({ task }) =>
 
 const splitLines = (value: string) => value.split("\n").map((line) => line.trim()).filter(Boolean);
 
+function ExamShell({ children }: { children: ReactNode }) {
+  return <div className="min-h-[720px] bg-[#e5e5e5] text-[#252525]"><header className="h-[74px] overflow-hidden border-b border-[#d4d4d4] bg-white"><div className="mx-auto flex h-full max-w-[1180px] items-center justify-between px-5"><div className="flex items-center gap-3"><div className="border-2 border-[#c1121c] px-2 py-1 text-[17px] font-black leading-none tracking-[-0.12em] text-[#c1121c]">siele</div><div className="hidden border-l border-[#d8d8d8] pl-3 text-[8px] font-semibold uppercase leading-3 tracking-[0.07em] text-[#555] sm:block">Servicio Internacional<br />de Evaluación de la Lengua Española</div></div><div className="font-mono text-[9px] text-[#777]">ES&nbsp;&nbsp;|&nbsp;&nbsp;PT&nbsp;&nbsp;|&nbsp;&nbsp;EN</div></div></header><main className="mx-auto max-w-[980px] px-3 py-5 sm:px-6">{children}</main><footer className="mt-8 border-t border-[#343c47] bg-[#34404d] px-5 py-4 text-center text-[9px] text-[#e2e4e5]"><div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 opacity-90"><span>Instituto Cervantes</span><span>Universidad de Salamanca</span><span>UNAM</span><span>UBA</span><span>Telefónica · Educación Digital</span></div></footer></div>;
+}
+
 export default function ReadingExam({ mode, initialQuestions, onBack, onStart, onComplete }: ReadingExamProps) {
   const [questions, setQuestions] = useState<ReadingQuestion[]>(initialQuestions.length ? initialQuestions : defaultQuestions());
   const [activeTask, setActiveTask] = useState(1);
@@ -83,7 +87,7 @@ export default function ReadingExam({ mode, initialQuestions, onBack, onStart, o
   };
 
   if (mode === "setup") {
-    return <div className="space-y-6">
+    return <ExamShell><div className="space-y-6">
       <div className="flex flex-col gap-4 rounded-[26px] bg-[#1e2528] p-6 text-[#f9f7f1] sm:p-8">
         <button onClick={onBack} className="flex w-fit items-center gap-2 text-[11px] text-[#c9d5d0] hover:text-white"><ArrowLeft size={14} /> Voltar ao registro</button>
         <p className="font-mono text-[9px] uppercase tracking-[0.19em] text-[#b8cec8]">Preparar prova · leitura</p>
@@ -102,10 +106,10 @@ export default function ReadingExam({ mode, initialQuestions, onBack, onStart, o
           <div className="mt-6 space-y-5">{questions.filter((question) => question.task === activeTask).map((question, index) => <div key={question.id} className="rounded-2xl border border-[#e4ded5] bg-[#faf8f3] p-4 sm:p-5"><div className="flex items-center justify-between"><span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#b35f41]">Questão {index + 1}</span><button onClick={() => removeQuestion(question.id)} className="text-[#a49b90] hover:text-[#b35f41]" title="Remover questão"><Trash2 size={14} /></button></div><div className="mt-4 grid gap-3"><label className="block"><span className="field-label">Texto-base</span><textarea value={question.sourceText} onChange={(event) => updateQuestion(question.id, { sourceText: event.target.value })} className="control min-h-[110px] resize-y" placeholder="Cole aqui o texto, e-mail, anúncio ou texto com lacunas…" /></label><label className="block"><span className="field-label">Pergunta / instrução</span><textarea value={question.prompt} onChange={(event) => updateQuestion(question.id, { prompt: event.target.value })} className="control min-h-[64px] resize-y" placeholder="Cole o enunciado desta questão…" /></label><label className="block"><span className="field-label">Opções do rádio, dropdown ou lacuna (uma por linha)</span><textarea value={question.options.join("\n")} onChange={(event) => updateQuestion(question.id, { options: splitLines(event.target.value) })} className="control min-h-[90px] resize-y" placeholder="Opção 1\nOpção 2\nOpção 3" /></label></div></div>)}</div>
         </div>
       </div>
-    </div>;
+    </div></ExamShell>;
   }
 
-  if (!currentQuestion) return <div className="rounded-[26px] border border-[#ded6ca] bg-[#fbfaf6] p-8"><p className="text-sm text-[#59625e]">Nenhuma questão foi preparada.</p><button onClick={onBack} className="mt-4 rounded-full bg-[#1e2528] px-4 py-2 text-xs text-white">Voltar</button></div>;
+  if (!currentQuestion) return <ExamShell><div className="rounded-[26px] border border-[#ded6ca] bg-[#fbfaf6] p-8"><p className="text-sm text-[#59625e]">Nenhuma questão foi preparada.</p><button onClick={onBack} className="mt-4 rounded-full bg-[#1e2528] px-4 py-2 text-xs text-white">Voltar</button></div></ExamShell>;
 
   const taskDone = activeQuestions.every((question) => answers[question.id]);
   const answer = answers[currentQuestion.id] ?? "";
@@ -116,12 +120,12 @@ export default function ReadingExam({ mode, initialQuestions, onBack, onStart, o
     else finish();
   };
 
-  return <div className="mx-auto max-w-[980px] space-y-5">
+  return <ExamShell><div className="mx-auto max-w-[980px] space-y-5">
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#d9d0c1] bg-[#faf8f3] px-4 py-3"><div><p className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#9b978f]">Prova 1 · Comprensión de lectura</p><p className="mt-1 text-[12px] font-semibold text-[#394240]">Tarea {activeTask} · questão {currentIndex + 1} de {activeQuestions.length}</p></div><span className="rounded-full bg-[#e7f2ef] px-3 py-1.5 font-mono text-[10px] text-[#21675e]">{completedCount} resposta(s) registrada(s)</span></div>
     <div className="overflow-hidden border border-[#c9c9c9] bg-white shadow-[0_12px_30px_rgba(30,37,40,0.08)]">
       <div className="border-b-[4px] border-[#b08b2c] bg-[#252525] px-4 py-3 text-[12px] font-semibold text-white">Comprensión de lectura</div>
       <div className="border-b border-[#ddd] px-5 py-3"><div className="flex flex-wrap gap-1">{taskInfo.map((item) => <button key={item.task} onClick={() => { if (item.task <= activeTask) { setActiveTask(item.task); setCurrentIndex(0); } }} className={`border px-3 py-1 text-[10px] ${item.task === activeTask ? "border-[#9b7a22] bg-[#b08b2c] text-white" : item.task < activeTask ? "border-[#b08b2c] bg-[#eee8d3] text-[#5c4b19]" : "border-[#ccc] bg-white text-[#999]"}`}>Tarea {item.task}</button>)}</div></div>
       <div className="p-5 sm:p-8"><p className="mb-5 text-[13px] leading-6 text-[#3f3f3f]">{taskInfo[activeTask - 1].description}. Responda conforme ao conteúdo apresentado.</p><div className="rounded-xl bg-[#e4e5e6] p-5 text-[13px] leading-6 text-[#262626] whitespace-pre-wrap">{currentQuestion.sourceText || "Texto-base ainda não preenchido."}</div><div className="mt-5 border-t border-[#ddd] bg-[#ededed] px-4 py-3 text-[13px] font-semibold text-[#333]">{currentQuestion.number}. {currentQuestion.prompt || "Enunciado ainda não preenchido."}</div><div className="space-y-2 py-4">{currentQuestion.options.map((option) => <label key={option} className="flex cursor-pointer items-start gap-3 px-2 py-2 text-[13px] leading-5 text-[#333] hover:bg-[#f4f4f4]"><input type={currentQuestion.type === "radio" ? "radio" : "radio"} name={currentQuestion.id} checked={answer === option} onChange={() => selectAnswer(option)} className="mt-1" /><span>{option}</span></label>)}</div>{currentQuestion.options.length === 0 && <textarea value={answer} onChange={(event) => selectAnswer(event.target.value)} className="control min-h-[100px]" placeholder="Resposta desta questão…" />}<div className="mt-6 flex items-center justify-between border-t border-[#ddd] pt-5"><span className="font-mono text-[11px] text-[#7b7b7b]">{currentIndex + 1} / {activeQuestions.length}</span><button disabled={!answer.trim()} onClick={next} className="inline-flex items-center gap-2 bg-[#a50046] px-6 py-3 text-[12px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40">{currentIndex === activeQuestions.length - 1 && activeTask === 5 ? <><Save size={14} /> Finalizar prova</> : <><ChevronRight size={14} /> Próxima</>}</button></div></div>
     </div><div className="flex items-center justify-between"><button onClick={onBack} className="inline-flex items-center gap-2 text-[11px] text-[#6b706c] hover:text-[#1e2528]"><ArrowLeft size={14} /> Sair sem finalizar</button><span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-[#7b817b]"><Check size={12} className="text-[#2c8b7d]" /> respostas ficam nesta sessão</span></div>
-  </div>;
+  </div></ExamShell>;
 }
