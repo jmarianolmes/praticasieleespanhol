@@ -69,7 +69,9 @@ type TaskRecord = {
   id: string;
   module: ModuleKey;
   taskNo: string;
+  sourceText: string;
   prompt: string;
+  options: string;
   answer: string;
   choice: string;
   correctAnswer: string;
@@ -92,7 +94,9 @@ type PracticeSession = {
 type Draft = {
   module: ModuleKey;
   taskNo: string;
+  sourceText: string;
   prompt: string;
+  options: string;
   answer: string;
   choice: string;
   correctAnswer: string;
@@ -153,7 +157,9 @@ const createSession = (title = "Sessão 01"): PracticeSession => ({
 const emptyDraft = (): Draft => ({
   module: "CL",
   taskNo: "1",
+  sourceText: "",
   prompt: "",
+  options: "",
   answer: "",
   choice: "",
   correctAnswer: "",
@@ -278,7 +284,7 @@ export default function Home() {
   };
 
   const hasUnsavedDraft = () => Boolean(
-    draft.prompt.trim() || draft.answer.trim() || draft.choice.trim() || draft.correctAnswer.trim() || draft.notes.trim() ||
+    draft.sourceText.trim() || draft.prompt.trim() || draft.options.trim() || draft.answer.trim() || draft.choice.trim() || draft.correctAnswer.trim() || draft.notes.trim() ||
     draft.captureIds.length > 0 || draft.audioIds.length > 0,
   );
 
@@ -427,7 +433,7 @@ export default function Home() {
 
   const saveTask = () => {
     if (!activeSession) return;
-    if (!draft.prompt.trim() && !draft.answer.trim() && draft.captureIds.length === 0 && draft.audioIds.length === 0) {
+    if (!draft.sourceText.trim() && !draft.prompt.trim() && !draft.options.trim() && !draft.answer.trim() && draft.captureIds.length === 0 && draft.audioIds.length === 0) {
       setStatus("Adicione uma pergunta, resposta ou anexo antes de salvar a tarefa.");
       return;
     }
@@ -435,7 +441,9 @@ export default function Home() {
       id: makeId("task"),
       module: draft.module,
       taskNo: draft.taskNo || String(activeSession.tasks.length + 1),
+      sourceText: draft.sourceText.trim(),
       prompt: draft.prompt.trim(),
+      options: draft.options.trim(),
       answer: draft.answer.trim(),
       choice: draft.choice.trim(),
       correctAnswer: draft.correctAnswer.trim(),
@@ -514,9 +522,19 @@ export default function Home() {
       pdf.setFontSize(10);
       pdf.text(`${String(index + 1).padStart(2, "0")}  ${info.label} · tarefa ${task.taskNo}`, margin + 4, y + 3);
       y += 17;
+      if (task.sourceText) {
+        y = addText("Texto-base / contexto", margin, y, contentWidth, 8, [94, 103, 101]);
+        y = addText(task.sourceText, margin, y + 1, contentWidth, 10);
+        y += 3;
+      }
       y = addText("Pergunta / instrução", margin, y, contentWidth, 8, [94, 103, 101]);
       y = addText(task.prompt, margin, y + 1, contentWidth, 10);
       y += 3;
+      if (task.options) {
+        y = addText("Opções apresentadas", margin, y, contentWidth, 8, [94, 103, 101]);
+        y = addText(task.options, margin, y + 1, contentWidth, 10);
+        y += 3;
+      }
       y = addText("Resposta registrada", margin, y, contentWidth, 8, [94, 103, 101]);
       y = addText(task.answer || task.choice, margin, y + 1, contentWidth, 10);
       if (task.correctAnswer) y = addText(`Gabarito informado: ${task.correctAnswer}`, margin, y + 2, contentWidth, 9, [30, 108, 95]);
@@ -749,11 +767,13 @@ function CaptureView({ draft, setDraft, activeModule, taskCount, captureCount, a
       <div className="rounded-[26px] border border-[#ded6ca] bg-[#fbfaf6] p-5 sm:p-7">
         <div className="flex flex-col gap-5 border-b border-[#e6e0d7] pb-6 sm:flex-row sm:items-start sm:justify-between"><div><p className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#9b978f]">Tarefa em elaboração</p><h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.05em]">Prepare o registro.</h2></div><div className="rounded-full bg-[#f2eee6] px-3 py-2 font-mono text-[10px] text-[#6b706c]">{String(taskCount + 1).padStart(2, "0")}º registro da sessão</div></div>
         <div className="mt-6 grid gap-3 sm:grid-cols-4">{MODULES.map((item) => { const Icon = item.icon; const active = item.key === draft.module; return <button key={item.key} onClick={() => changeDraftModule(item.key)} className={`rounded-2xl border p-3 text-left transition ${active ? "border-[#1e2528] bg-[#1e2528] text-[#f9f7f1] shadow-[0_8px_16px_rgba(30,37,40,0.12)]" : "border-[#e4ded5] bg-[#faf8f3] text-[#6b706c] hover:border-[#a9aaa2]"}`}><Icon size={16} className={active ? "text-[#f2c29f]" : "text-[#b35f41]"} /><span className="mt-3 block text-[11px] font-semibold">{item.short}</span><span className={`mt-1 block text-[10px] leading-4 ${active ? "text-[#b9c7c2]" : "text-[#90948d]"}`}>{item.key}</span></button>; })}</div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-[115px_1fr]">
+        <div className="mt-6 grid gap-4 sm:grid-cols-[115px_1fr]
+        ">
           <Field label="Tarefa / item"><input value={draft.taskNo} onChange={(event) => setDraft((current) => ({ ...current, taskNo: event.target.value }))} className="control" placeholder="1" /></Field>
-          <Field label="Pergunta ou instrução"><textarea value={draft.prompt} onChange={(event) => setDraft((current) => ({ ...current, prompt: event.target.value }))} className="control min-h-[94px] resize-y" placeholder="Cole ou transcreva o enunciado apresentado pelo simulador…" /></Field>
+          <Field label="Texto-base apresentado"><textarea value={draft.sourceText} onChange={(event) => setDraft((current) => ({ ...current, sourceText: event.target.value }))} className="control min-h-[110px] resize-y" placeholder="Cole aqui o texto, anúncio, e-mail ou trecho com lacunas…" /><div className="mt-2 text-right font-mono text-[9px] text-[#9b978f]">conteúdo de apoio da questão</div></Field>
         </div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label={draft.module === "EIE" ? "Resposta escrita" : "Resposta / alternativa marcada"}><textarea value={draft.answer} onChange={(event) => setDraft((current) => ({ ...current, answer: event.target.value }))} className="control min-h-[128px] resize-y" placeholder={draft.module === "EIE" ? "Escreva aqui a resposta original, sem corrigir…" : "Descreva a alternativa ou resposta selecionada…"} /><div className="mt-2 flex items-center justify-between font-mono text-[9px] text-[#9b978f]"><span>{draft.answer.trim() ? `${draft.answer.trim().split(/\s+/).length} palavra(s)` : "contador de palavras"}</span><span>{draft.module === "EIE" ? "preservar original" : "registro manual"}</span></div></Field><Field label="Observações para o corretor"><textarea value={draft.notes} onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))} className="control min-h-[128px] resize-y" placeholder="Dúvida, tempo usado, dificuldade, contexto ou hipótese…" /><div className="mt-2 text-right font-mono text-[9px] text-[#9b978f]">campo opcional</div></Field></div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label="Pergunta ou instrução"><textarea value={draft.prompt} onChange={(event) => setDraft((current) => ({ ...current, prompt: event.target.value }))} className="control min-h-[94px] resize-y" placeholder="Ex.: Pedro dice que… / Elija el fragmento correcto…" /></Field><Field label="Opções ou alternativas"><textarea value={draft.options} onChange={(event) => setDraft((current) => ({ ...current, options: event.target.value }))} className="control min-h-[94px] resize-y" placeholder="Cole uma opção por linha, incluindo as opções do menu suspenso…" /><div className="mt-2 text-right font-mono text-[9px] text-[#9b978f]">uma opção por linha</div></Field></div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label={draft.module === "EIE" ? "Resposta escrita" : "Resposta selecionada ou preenchida"}><textarea value={draft.answer} onChange={(event) => setDraft((current) => ({ ...current, answer: event.target.value }))} className="control min-h-[128px] resize-y" placeholder={draft.module === "EIE" ? "Escreva aqui a resposta original, sem corrigir…" : "Registre a alternativa marcada ou a palavra/frase escolhida…"} /><div className="mt-2 flex items-center justify-between font-mono text-[9px] text-[#9b978f]"><span>{draft.answer.trim() ? `${draft.answer.trim().split(/\s+/).length} palavra(s)` : "contador de palavras"}</span><span>{draft.module === "EIE" ? "preservar original" : "registro manual"}</span></div></Field><Field label="Observações para o corretor"><textarea value={draft.notes} onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))} className="control min-h-[128px] resize-y" placeholder="Dúvida, tempo usado, dificuldade, contexto ou hipótese…" /><div className="mt-2 text-right font-mono text-[9px] text-[#9b978f]">campo opcional</div></Field></div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2"><Field label="Gabarito conhecido (opcional)"><input value={draft.correctAnswer} onChange={(event) => setDraft((current) => ({ ...current, correctAnswer: event.target.value }))} className="control" placeholder="Ex.: B / ainda não sei" /></Field><Field label="Status do registro"><div className="flex h-[43px] items-center gap-2 rounded-xl border border-[#ded6ca] bg-[#f5f2eb] px-3 text-[11px] text-[#6b706c]"><Check size={14} className="text-[#2c8b7d]" /> pronto para anexar evidências</div></Field></div>
         <div className="mt-7 flex flex-col gap-3 border-t border-[#e6e0d7] pt-5 sm:flex-row sm:items-center sm:justify-between"><div><div className="flex flex-wrap gap-2"><span className="rounded-full bg-[#e7f2ef] px-3 py-1.5 font-mono text-[9px] text-[#21675e]">{draft.captureIds.length} imagem(ns)</span><span className="rounded-full bg-[#f5e4d7] px-3 py-1.5 font-mono text-[9px] text-[#a95538]">{draft.audioIds.length} áudio(s)</span></div><p className="mt-2 text-[10px] text-[#858a84]">Ao salvar, o formulário avança para a próxima tarefa.</p></div><button onClick={saveTask} className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#b35f41] px-5 text-[12px] font-bold text-white shadow-[0_8px_18px_rgba(179,95,65,0.19)] transition hover:bg-[#944a31]"><Save size={15} /> Salvar e começar próxima</button></div>
       </div>
@@ -783,7 +803,7 @@ function TaskRow({ task, index, activeSession, onRemove }: { task: TaskRecord; i
   const info = moduleInfo(task.module);
   const captures = activeSession.captures.filter((capture) => task.captureIds.includes(capture.id));
   const audios = activeSession.audios.filter((audio) => task.audioIds.includes(audio.id));
-  return <article className="rounded-[22px] border border-[#ded6ca] bg-[#fbfaf6] p-5 transition hover:shadow-[0_12px_28px_rgba(72,67,58,0.07)] sm:p-6"><div className="flex flex-col gap-4 sm:flex-row sm:items-start"><div className="flex items-start gap-3"><span className="font-mono text-[10px] text-[#b35f41]">{String(index + 1).padStart(2, "0")}</span><div><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-[#f2eee6] px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-[#6b706c]">{info.short}</span><span className="font-mono text-[9px] text-[#9b978f]">tarefa {task.taskNo}</span></div><p className="mt-3 max-w-[720px] whitespace-pre-wrap text-[13px] leading-6 text-[#394240]">{task.prompt || "Sem pergunta transcrita — consulte a captura anexada."}</p><div className="mt-3 rounded-xl bg-[#f4f0e9] p-3 text-[12px] leading-5 text-[#66706a]"><span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#9b978f]">Resposta</span><p className="mt-1 whitespace-pre-wrap">{task.answer || task.choice || "Sem texto; ver áudio ou imagem."}</p></div>{task.notes && <p className="mt-3 text-[11px] italic leading-5 text-[#858a84]">“{task.notes}”</p>}</div></div><div className="flex shrink-0 items-center gap-2 sm:ml-auto"><span className="flex items-center gap-1.5 rounded-full bg-[#e7f2ef] px-2.5 py-1.5 font-mono text-[9px] text-[#21675e]"><FileImage size={11} /> {captures.length}</span><span className="flex items-center gap-1.5 rounded-full bg-[#f5e4d7] px-2.5 py-1.5 font-mono text-[9px] text-[#a95538]"><FileAudio size={11} /> {audios.length}</span><button onClick={onRemove} className="grid h-8 w-8 place-items-center rounded-full border border-[#eadfd5] text-[#a49b90] transition hover:border-[#b35f41] hover:text-[#b35f41]" title="Remover registro"><Trash2 size={13} /></button></div></div></article>;
+  return <article className="rounded-[22px] border border-[#ded6ca] bg-[#fbfaf6] p-5 transition hover:shadow-[0_12px_28px_rgba(72,67,58,0.07)] sm:p-6"><div className="flex flex-col gap-4 sm:flex-row sm:items-start"><div className="flex items-start gap-3"><span className="font-mono text-[10px] text-[#b35f41]">{String(index + 1).padStart(2, "0")}</span><div><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-[#f2eee6] px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-[#6b706c]">{info.short}</span><span className="font-mono text-[9px] text-[#9b978f]">tarefa {task.taskNo}</span></div>{task.sourceText && <div className="mt-3 rounded-xl bg-[#eef3f0] p-3 text-[12px] leading-5 text-[#52645e]"><span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#7a938a]">Texto-base</span><p className="mt-1 whitespace-pre-wrap">{task.sourceText}</p></div>}<p className="mt-3 max-w-[720px] whitespace-pre-wrap text-[13px] leading-6 text-[#394240]">{task.prompt || "Sem pergunta transcrita — consulte a captura anexada."}</p>{task.options && <div className="mt-3 rounded-xl bg-[#f7f1e6] p-3 text-[12px] leading-5 text-[#6b665d]"><span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#9b978f]">Opções</span><p className="mt-1 whitespace-pre-wrap">{task.options}</p></div>}<div className="mt-3 rounded-xl bg-[#f4f0e9] p-3 text-[12px] leading-5 text-[#66706a]"><span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#9b978f]">Resposta</span><p className="mt-1 whitespace-pre-wrap">{task.answer || task.choice || "Sem texto; ver áudio ou imagem."}</p></div>{task.notes && <p className="mt-3 text-[11px] italic leading-5 text-[#858a84]">“{task.notes}”</p>}</div></div><div className="flex shrink-0 items-center gap-2 sm:ml-auto"><span className="flex items-center gap-1.5 rounded-full bg-[#e7f2ef] px-2.5 py-1.5 font-mono text-[9px] text-[#21675e]"><FileImage size={11} /> {captures.length}</span><span className="flex items-center gap-1.5 rounded-full bg-[#f5e4d7] px-2.5 py-1.5 font-mono text-[9px] text-[#a95538]"><FileAudio size={11} /> {audios.length}</span><button onClick={onRemove} className="grid h-8 w-8 place-items-center rounded-full border border-[#eadfd5] text-[#a49b90] transition hover:border-[#b35f41] hover:text-[#b35f41]" title="Remover registro"><Trash2 size={13} /></button></div></div></article>;
 }
 
 function downloadBlob(blob: Blob, fileName: string) {
