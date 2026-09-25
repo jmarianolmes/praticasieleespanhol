@@ -309,7 +309,7 @@ export default function Home() {
   const changeDraftModule = (module: ModuleKey) => {
     if (module === draft.module && module !== "CL") return;
     if (module === "CL" && draft.module === "CL" && !readingMode) {
-      setReadingMode("setup");
+      setReadingMode("take");
       return;
     }
     if (isRecording) {
@@ -318,7 +318,7 @@ export default function Home() {
     }
     if (hasUnsavedDraft() && !window.confirm("Há dados da tarefa atual que ainda não foram salvos. Mudar de módulo vai descartá-los. Continuar?")) return;
     if (module === "CL") {
-      setReadingMode("setup");
+      setReadingMode("take");
       setDraft(emptyDraft());
       return;
     }
