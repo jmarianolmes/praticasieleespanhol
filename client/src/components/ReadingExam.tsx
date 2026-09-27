@@ -4,7 +4,7 @@ import { Check, Download, Pencil, Play, Save } from "lucide-react";
 export type ReadingQuestion = { id: string; task: number; number: number; type: "radio" | "select" | "fragment" | "word"; sourceText: string; prompt: string; options: string[] };
 export type ReadingAttemptAnswer = ReadingQuestion & { answer: string };
 type Mode = "edit" | "take";
-type Props = { initialQuestions: ReadingQuestion[]; onComplete: (answers: ReadingAttemptAnswer[]) => void };
+type Props = { initialQuestions: ReadingQuestion[]; initialMode?: Mode; onComplete: (answers: ReadingAttemptAnswer[]) => void };
 const tasks = [[1, "Tarea 1", "Textos breves"], [2, "Tarea 2", "Un correo"], [3, "Tarea 3", "Tres textos"], [4, "Tarea 4", "Fragmentos"], [5, "Tarea 5", "Palabras"]] as const;
 const marker = /\[\[(\d+)-(\d+)\]\]/g;
 const lines = (value: string) => value.split("\n").map((item) => item.trim()).filter(Boolean);
@@ -13,8 +13,8 @@ function Shell({ children }: { children: ReactNode }) {
   return <div className="min-h-screen bg-[#f1f1f1] text-[#333]" style={{ fontFamily: "Lato, Arial, sans-serif" }}><header className="border-b border-[#263746] bg-[#34404d]"><div className="mx-auto flex min-h-[74px] max-w-[1180px] items-center justify-between px-5"><div className="flex items-center gap-4"><img src="/praticasieleespanhol/img/header.png" className="h-12 w-auto max-w-[310px] object-contain object-left" alt="SIELE" /><div className="hidden text-[10px] font-bold uppercase tracking-wide text-white/80 sm:block">Simulador de práctica · Comprensión de lectura</div></div><div className="text-xs font-bold text-white">ES&nbsp;&nbsp;|&nbsp;&nbsp;PT&nbsp;&nbsp;|&nbsp;&nbsp;EN</div></div></header>{children}<footer className="mt-10 bg-[#34404d] px-5 py-5 text-center text-xs text-white/80">Instituto Cervantes · Universidad de Salamanca · UNAM · UBA · Telefónica</footer></div>;
 }
 
-export default function ReadingExam({ initialQuestions, onComplete }: Props) {
-  const [mode, setMode] = useState<Mode>("edit");
+export default function ReadingExam({ initialQuestions, initialMode = "edit", onComplete }: Props) {
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [questions, setQuestions] = useState<ReadingQuestion[]>(() => initialQuestions.map((item) => ({ ...item, options: [...item.options] })));
   const [task, setTask] = useState(1);
   const [answers, setAnswers] = useState<Record<string, string>>({});
