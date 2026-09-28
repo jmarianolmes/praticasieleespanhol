@@ -471,3 +471,16 @@ O objetivo do projeto é construir um instrumento doméstico simples, seguro e �
 [3]: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages "Documentação oficial sobre workflows personalizados do GitHub Pages"
 
 [4]: https://github.com/actions/configure-pages "Action oficial configure-pages do GitHub"
+
+
+## Atualização de integração — 28/09/2026
+
+A versão mais recente do GitHub passou a ter uma arquitetura de seleção de exames, substituindo a dashboard antiga como tela inicial. A aplicação agora preserva o exame **SIELE · Comprensión de lectura** já existente e adiciona o **CAP Mercancías · 26/09/2026** como segundo exame independente.
+
+A tela inicial está em `client/src/pages/Home.tsx`. O exame de leitura continua em `client/src/components/ReadingExam.tsx`, usando `client/src/data/readingExamData.json`. O novo exame está em `client/src/components/MercanciasExam.tsx` e utiliza o banco `client/src/data/mercanciasExam.ts`.
+
+O exame Mercancías abre pelo cartão **CAP Mercancías · 26/09/2026** e mantém a numeração original de 1 a 103. A candidata pode navegar por botões de anterior/próxima ou clicar diretamente em qualquer número. As respostas são persistidas em `localStorage` com a chave `siele-pratica-casa-exam-2026-09-26-mercancias`. O fechamento calcula apenas `acertos nas questões 1–100 / 100`; as questões 101, 102 e 103 permanecem visíveis como reservas, mas ficam fora do resultado.
+
+O gabarito do Mercancías foi lido da plantilla fornecida e validado por inspeção da marcação dos quadrados na imagem renderizada. O banco foi validado automaticamente com 103 itens consecutivos, quatro alternativas em cada item, 100 itens pontuados e três reservas.
+
+O workflow de build atual também gera `dist/public/404.html` como cópia do `index.html`, permitindo que o GitHub Pages carregue a aplicação mesmo quando o endereço do projeto é acessado diretamente ou recarregado.
